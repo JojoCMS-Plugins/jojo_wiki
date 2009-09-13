@@ -1,0 +1,1 @@
+A *very* simple Wiki. Currently editing is only available to admins.

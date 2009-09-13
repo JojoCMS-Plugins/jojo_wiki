@@ -1,0 +1,1 @@
+A very simple wiki, useful for documentation on (say) the Jojo website. Editing is currently restricted to admins, but feel free to contribute to this plugin.
