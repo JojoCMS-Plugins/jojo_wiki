@@ -35,12 +35,18 @@ $body = Jojo::bb2html($bodycode);
 $prefix = JOJO_Plugin_Jojo_wiki::getPrefix();
 
 if ($id) {
-    Jojo::updateQuery("UPDATE {wiki} SET wk_title=wk_title, wk_url=wk_url, wk_bodycode=?, wk_body=? WHERE wikiid=?", array($bodycode, $body, $id));
-    $redirect = empty($url) ? _SITEURL.'/'.$prefix.'/' : _SITEURL.'/'.$prefix.'/'.$url.'/';
-    $frajax->redirect($redirect);
+    Jojo::updateQuery("UPDATE {wiki} SET wk_title=wk_title, wk_url=wk_url, wk_bodycode=?, wk_body=?, wk_title=? WHERE wikiid=?", array($bodycode, $body, $title, $id));
+    //$redirect = empty($url) ? _SITEURL.'/'.$prefix.'/' : _SITEURL.'/'.$prefix.'/'.$url.'/';
+    //$frajax->redirect($redirect);
 } else {
     Jojo::insertQuery("INSERT INTO {wiki} SET wk_title=?, wk_url=?, wk_bodycode=?, wk_body=?", array($title, $url, $bodycode, $body));
+    $frajax->script('parent.$(".create-new-wiki").removeClass("create-new-wiki");');
     $frajax->redirect(_SITEURL.'/'.$prefix.'/'.$url.'/');
 }
+$frajax->script('parent.$("#wiki-edit-status").html("Saved...").fadeIn("slow").fadeTo(5000, 1).fadeOut("slow");');
+$frajax->assign('wiki-view', 'innerHTML', JOJO_Plugin_Jojo_wiki::renderWikiBody($body));
+$frajax->assign('body_code', 'value', $bodycode);
+$frajax->script('parent.$("#wiki-edit").slideUp("slow");');
+$frajax->script('parent.$("#wiki-view").slideDown("slow");');
 
 $frajax->sendFooter();

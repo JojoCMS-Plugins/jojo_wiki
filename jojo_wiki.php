@@ -67,47 +67,7 @@ class JOJO_Plugin_Jojo_wiki extends JOJO_Plugin
             $wiki = $wikis[0];
             $content['title'] = $wiki['wk_title'];
             $content['seotitle'] = $wiki['wk_title'];
-            $wiki['body'] = "\n" . trim($wiki['wk_body']);
-
-            /* Add headings eg == heading == */
-            $wiki['body'] = preg_replace_callback('%(<br \/>)?\n(={1,6}) (.*) \\2\n<br \/>%U',
-                                array('JOJO_Plugin_Jojo_wiki', '_formatHeadings'),
-                                $wiki['body']);
-
-            /* Add bold eq ''bold text'' */
-            $wiki['body'] = preg_replace_callback("%'''(()|[^'].*)'''%U",
-                                array('JOJO_Plugin_Jojo_wiki', '_formatBold'),
-                                $wiki['body']);
-
-            /* Add italic eq ''italic text'' */
-            $wiki['body'] = preg_replace_callback("%''(()|[^'].*)''%U",
-                                array('JOJO_Plugin_Jojo_wiki', '_formatItalic'),
-                                $wiki['body']);
-
-            /* Add simple links eq [[Page Title]] */
-            $wiki['body'] = preg_replace_callback("%\[\[((?!toc)[^|]*)\]\]%U",
-                                array('JOJO_Plugin_Jojo_wiki', '_formatSimpleLink'),
-                                $wiki['body']);
-
-            /* Add named links eq [[Page Title|Link Label]] */
-            $wiki['body'] = preg_replace_callback("%\[\[([^|]*)\|(.*)\]\]%U",
-                                array('JOJO_Plugin_Jojo_wiki', '_formatNamedLink'),
-                                $wiki['body']);
-
-            /* Add table of contents eq [[toc]] */
-            $wiki['body'] = preg_replace_callback("%\[\[toc\]\]%U",
-                                array('JOJO_Plugin_Jojo_wiki', '_insertTOC'),
-                                $wiki['body']);
-
-            /* Add 'empty' class to dead wiki links */
-            $wiki['body'] = preg_replace_callback('%<a(.*?)href="'.JOJO_Plugin_Jojo_wiki::getPrefix().'/(.*?)/?"(.*?)>%',
-                                array('JOJO_Plugin_Jojo_wiki','_checkLinks'),
-                                $wiki['body']);
-
-            /* Pull out code examples, lines starting with two whitespace lines */
-            $wiki['body'] = preg_replace_callback('%\n  (.*)\n<br \/>\n(  (.*)\n<br \/>\n)*%',
-                                array('JOJO_Plugin_Jojo_wiki','_codeExample'),
-                                $wiki['body']);
+            $wiki['body'] = $this->renderWikiBody($wiki['wk_body']);
 
             $smarty->assign('wiki', $wiki);
 
@@ -150,6 +110,52 @@ class JOJO_Plugin_Jojo_wiki extends JOJO_Plugin
     {
         //Assume the URL is correct
         return _PROTOCOL . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    }
+
+    function renderWikiBody($wikicode) {
+        $wikicode = "\n" . trim($wikicode);
+
+        /* Add headings eg == heading == */
+        $wikicode = preg_replace_callback('%(<br \/>)?\n(={1,6}) (.*) \\2\n<br \/>%U',
+            array('JOJO_Plugin_Jojo_wiki', '_formatHeadings'),
+            $wikicode);
+
+        /* Add bold eq ''bold text'' */
+        $wikicode = preg_replace_callback("%'''(()|[^'].*)'''%U",
+            array('JOJO_Plugin_Jojo_wiki', '_formatBold'),
+            $wikicode);
+
+        /* Add italic eq ''italic text'' */
+        $wikicode = preg_replace_callback("%''(()|[^'].*)''%U",
+            array('JOJO_Plugin_Jojo_wiki', '_formatItalic'),
+            $wikicode);
+
+        /* Add simple links eq [[Page Title]] */
+        $wikicode = preg_replace_callback("%\[\[((?!toc)[^|]*)\]\]%U",
+            array('JOJO_Plugin_Jojo_wiki', '_formatSimpleLink'),
+            $wikicode);
+
+        /* Add named links eq [[Page Title|Link Label]] */
+        $wikicode = preg_replace_callback("%\[\[([^|]*)\|(.*)\]\]%U",
+            array('JOJO_Plugin_Jojo_wiki', '_formatNamedLink'),
+            $wikicode);
+
+        /* Add table of contents eq [[toc]] */
+        $wikicode = preg_replace_callback("%\[\[toc\]\]%U",
+            array('JOJO_Plugin_Jojo_wiki', '_insertTOC'),
+            $wikicode);
+
+        /* Add 'empty' class to dead wiki links */
+        $wikicode = preg_replace_callback('%<a(.*?)href="'.JOJO_Plugin_Jojo_wiki::getPrefix().'/(.*?)/?"(.*?)>%',
+            array('JOJO_Plugin_Jojo_wiki','_checkLinks'),
+            $wikicode);
+
+        /* Pull out code examples, lines starting with two whitespace lines */
+        $wikicode = preg_replace_callback('%\n  (.*)\n<br \/>\n(  (.*)\n<br \/>\n)*%',
+            array('JOJO_Plugin_Jojo_wiki','_codeExample'),
+            $wikicode);
+
+        return $wikicode;
     }
 
     function _codeExample($matches)

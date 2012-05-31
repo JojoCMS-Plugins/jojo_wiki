@@ -7,3 +7,11 @@ div.wikitoc {
     background: #ddd;
     padding: 10px;
 }
+
+.wiki-edit-status {
+    font-weight: bold;
+    margin-left: 30px;
+}
+.wiki-edit-status.new-wiki {
+    display: none;
+}
