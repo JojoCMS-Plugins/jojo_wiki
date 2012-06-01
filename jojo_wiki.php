@@ -87,8 +87,10 @@ class JOJO_Plugin_Jojo_wiki extends JOJO_Plugin
             $content['title'] = $title;
             $content['seotitle'] = $title . ' - New Page';
 
-            $smarty->assign('wikititle', $title);
-            $smarty->assign('wikiurl', $url);
+            $smarty->assign('wiki', array(
+                'wk_title' => $title,
+                'wk_url' => $url,
+            ));
 
             /* Add wiki breadcrumb */
             $breadcrumbs = $this->_getBreadCrumbs();

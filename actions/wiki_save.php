@@ -40,8 +40,8 @@ if ($id) {
     //$frajax->redirect($redirect);
 } else {
     Jojo::insertQuery("INSERT INTO {wiki} SET wk_title=?, wk_url=?, wk_bodycode=?, wk_body=?", array($title, $url, $bodycode, $body));
+    //$frajax->redirect(_SITEURL.'/'.$prefix.'/'.$url.'/');
     $frajax->script('parent.$(".create-new-wiki").removeClass("create-new-wiki");');
-    $frajax->redirect(_SITEURL.'/'.$prefix.'/'.$url.'/');
 }
 $frajax->script('parent.$("#wiki-edit-status").html("Saved...").fadeIn("slow").fadeTo(5000, 1).fadeOut("slow");');
 $frajax->assign('wiki-view', 'innerHTML', JOJO_Plugin_Jojo_wiki::renderWikiBody($body));
