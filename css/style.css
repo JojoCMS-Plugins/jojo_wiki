@@ -10,6 +10,7 @@ div.wikitoc {
     font-weight: bold;
     margin-left: 30px;
 }
-#wiki-edit-bar.create-new-wiki {
+.create-wiki .edit,
+.edit-wiki .create {
     display: none;
 }
