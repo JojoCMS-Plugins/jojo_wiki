@@ -11,6 +11,7 @@
             <form method="post" action="actions/wiki_save.php?arg1={$wiki.wikiid}" target="frajax-iframe">
                 Title: <input type="text" name="title" id="title" value="{$wiki.wk_title}" /><br />
                 <div{if $wiki} class="creating-wiki"{/if}>{if !$wiki.wikiid}URL: {/if}<input type="{if !$wiki.wikiid}text{else}hidden{/if}" name="url" value="{$wiki.wk_url}" /></div>
+                <input type="hidden" name="oldurl" value="{$wiki.wk_url}" />
                 <textarea name="body" id="body_code" class="jTagEditor jTagBB" rows="30" cols="70">{$wiki.wk_bodycode|escape:'html':'utf-8'}</textarea><br />
                 <input type="submit" name="save" value="Save" /><br />
             </form>
