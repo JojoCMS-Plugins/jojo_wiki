@@ -22,7 +22,7 @@ class JOJO_Plugin_Jojo_wiki extends JOJO_Plugin
     /**
      * Get the url prefix for this plugin
      */
-    function getPrefix($for = 'JOJO_Plugin_Jojo_wiki') {
+    static function getPrefix($for = 'JOJO_Plugin_Jojo_wiki') {
         static $_cache;
 
         if (!isset($_cache[$for])) {
@@ -114,7 +114,7 @@ class JOJO_Plugin_Jojo_wiki extends JOJO_Plugin
         return _PROTOCOL . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
-    function renderWikiBody($wikicode) {
+    static function renderWikiBody($wikicode) {
         $wikicode = "\n" . trim($wikicode);
 
         /* Add headings eg == heading == */
@@ -160,14 +160,14 @@ class JOJO_Plugin_Jojo_wiki extends JOJO_Plugin
         return $wikicode;
     }
 
-    function _codeExample($matches)
+    static function _codeExample($matches)
     {
         $clean = trim(str_replace(array("<br />\n", "\n  "), array('', "\n"), $matches[0]), "\n");
         $html = str_replace(' ', '&nbsp;', $clean);
         return "\n<div class='codeblock'>" . nl2br($html) . "</div>\n";
     }
 
-    function _checkLinks($matches)
+    static function _checkLinks($matches)
     {
         $data = Jojo::selectQuery("SELECT * FROM {wiki} WHERE wk_url=?", $matches[2]);
         if (!count($data)) {
@@ -200,21 +200,21 @@ class JOJO_Plugin_Jojo_wiki extends JOJO_Plugin
             );
     }
 
-    function _formatItalic($matches)
+    static function _formatItalic($matches)
     {
         return sprintf('<em>%s</em>',
                 $matches[1]
             );
     }
 
-    function _formatBold($matches)
+    static function _formatBold($matches)
     {
         return sprintf('<strong>%s</strong>',
                 $matches[1]
             );
     }
 
-    function _formatSimpleLink($matches)
+    static function _formatSimpleLink($matches)
     {
         return sprintf('<a href="%s/%s/">%s</a>',
                             JOJO_Plugin_Jojo_wiki::getPrefix(),
@@ -222,7 +222,7 @@ class JOJO_Plugin_Jojo_wiki extends JOJO_Plugin
                             $matches[1]);
     }
 
-    function _formatNamedLink($matches)
+    static function _formatNamedLink($matches)
     {
         return sprintf('<a href="%s/%s/">%s</a>',
                             JOJO_Plugin_Jojo_wiki::getPrefix(),
