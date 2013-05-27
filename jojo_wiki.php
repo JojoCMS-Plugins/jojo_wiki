@@ -114,7 +114,7 @@ class JOJO_Plugin_Jojo_wiki extends JOJO_Plugin
         return _PROTOCOL . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
-    static function renderWikiBody($wikicode) {
+    function renderWikiBody($wikicode) {
         $wikicode = "\n" . trim($wikicode);
 
         /* Add headings eg == heading == */
